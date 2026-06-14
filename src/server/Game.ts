@@ -1,6 +1,7 @@
 import * as constants from '../common/constants';
 import {BeginnerCorporation} from './cards/corporation/BeginnerCorporation';
 import {Board} from './boards/Board';
+import {GlobalParameterMaximums, getGlobalParameterMaximums} from '../common/boards/GlobalParameterMaximums';
 import {CardName} from '../common/cards/CardName';
 import {ClaimedMilestone, serializeClaimedMilestones, deserializeClaimedMilestones} from './milestones/ClaimedMilestone';
 import {ColonyDealer} from './colonies/ColonyDealer';
@@ -561,8 +562,8 @@ export class Game implements IGame, Logger {
   }
 
   public marsIsTerraformed(): boolean {
-    const oxygenMaxed = this.oxygenLevel >= constants.MAX_OXYGEN_LEVEL;
-    const temperatureMaxed = this.temperature >= constants.MAX_TEMPERATURE;
+    const oxygenMaxed = this.oxygenLevel >= this.globalParameterMaximums.oxygen;
+    const temperatureMaxed = this.temperature >= this.globalParameterMaximums.temperature;
     const oceansMaxed = !this.canAddOcean();
     let globalParametersMaxed = oxygenMaxed && temperatureMaxed && oceansMaxed;
     const venusMaxed = this.getVenusScaleLevel() === constants.MAX_VENUS_SCALE;
@@ -929,7 +930,7 @@ export class Game implements IGame, Logger {
     const orOptions = new OrOptions()
       .setTitle('Select action for World Government Terraforming')
       .setButtonLabel('Confirm');
-    if (this.getTemperature() < constants.MAX_TEMPERATURE) {
+    if (this.getTemperature() < this.globalParameterMaximums.temperature) {
       orOptions.options.push(
         new SelectOption('Increase temperature', 'Increase')
           .annotate(GlobalParameter.TEMPERATURE)
@@ -940,7 +941,7 @@ export class Game implements IGame, Logger {
           }),
       );
     }
-    if (this.getOxygenLevel() < constants.MAX_OXYGEN_LEVEL) {
+    if (this.getOxygenLevel() < this.globalParameterMaximums.oxygen) {
       orOptions.options.push(
         new SelectOption('Increase oxygen', 'Increase')
           .annotate(GlobalParameter.OXYGEN)
@@ -1198,7 +1199,7 @@ export class Game implements IGame, Logger {
   }
 
   public increaseOxygenLevel(player: IPlayer, increments: -2 | -1 | 1 | 2): void {
-    if (this.oxygenLevel >= constants.MAX_OXYGEN_LEVEL) {
+    if (this.oxygenLevel >= this.globalParameterMaximums.oxygen) {
       return undefined;
     }
 
@@ -1209,7 +1210,7 @@ export class Game implements IGame, Logger {
     }
 
     // Literal typing makes |increments| a const
-    const steps = Math.min(increments, constants.MAX_OXYGEN_LEVEL - this.oxygenLevel);
+    const steps = Math.min(increments, this.globalParameterMaximums.oxygen - this.oxygenLevel);
 
     if (this.phase !== Phase.SOLAR) {
       TurmoilHandler.onGlobalParameterIncrease(player, GlobalParameter.OXYGEN, steps);
@@ -1296,7 +1297,7 @@ export class Game implements IGame, Logger {
   }
 
   public increaseTemperature(player: IPlayer, increments: -2 | -1 | 1 | 2 | 3): undefined {
-    if (this.temperature >= constants.MAX_TEMPERATURE) {
+    if (this.temperature >= this.globalParameterMaximums.temperature) {
       return undefined;
     }
 
@@ -1306,7 +1307,7 @@ export class Game implements IGame, Logger {
     }
 
     // Literal typing makes |increments| a const
-    const steps = Math.min(increments, (constants.MAX_TEMPERATURE - this.temperature) / 2);
+    const steps = Math.min(increments, (this.globalParameterMaximums.temperature - this.temperature) / 2);
 
     if (this.phase !== Phase.SOLAR) {
       // BONUS FOR HEAT PRODUCTION AT -20 and -24
@@ -1344,6 +1345,10 @@ export class Game implements IGame, Logger {
 
   public getTemperature(): number {
     return this.temperature;
+  }
+
+  public get globalParameterMaximums(): GlobalParameterMaximums {
+    return getGlobalParameterMaximums(this.gameOptions.boardName);
   }
 
   public getGeneration(): number {
@@ -1526,7 +1531,7 @@ export class Game implements IGame, Logger {
       break;
     case SpaceBonus.TEMPERATURE:
     case SpaceBonus.TEMPERATURE_4MC:
-      if (this.getTemperature() < constants.MAX_TEMPERATURE) {
+      if (this.getTemperature() < this.globalParameterMaximums.temperature) {
         const cost = spaceBonus === SpaceBonus.TEMPERATURE ? constants.VASTITAS_BOREALIS_BONUS_TEMPERATURE_COST : constants.VASTITAS_BOREALIS_NOVA_BONUS_TEMPERATURE_COST;
         this.defer(new SelectPaymentDeferred(
           player,
@@ -1581,12 +1586,12 @@ export class Game implements IGame, Logger {
   }
 
   public canAddOcean(): boolean {
-    return this.board.getOceanSpaces().length < constants.MAX_OCEAN_TILES;
+    return this.board.getOceanSpaces().length < this.globalParameterMaximums.oceans;
   }
 
   public canRemoveOcean(): boolean {
     const count = this.board.getOceanSpaces().length;
-    return count > 0 && count < constants.MAX_OCEAN_TILES;
+    return count > 0 && count < this.globalParameterMaximums.oceans;
   }
 
   public addOcean(player: IPlayer, space: Space): void {

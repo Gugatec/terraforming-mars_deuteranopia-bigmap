@@ -8,6 +8,19 @@
   }
 }
 
+// Larger maps (e.g. Amazonis Planitia, one hex-ring bigger than the standard maps) extend beyond
+// the standard board. The board terrain image is set on `.board-cont--large` (like the standard
+// maps set it on `.board-cont`); the inner board is transparent so the terrain shows through the
+// hexes. Each hex keeps a faint outline as an alignment aid while the art is still being tuned.
+.board--large {
+  width: 620px;
+  height: 560px;
+
+  .board-space {
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.25);
+  }
+}
+
 .board-cont {
   display: inline-block;
   vertical-align: top;
@@ -22,6 +35,14 @@
 
 .board-without-venus{
   background: url(./assets/board/mars-without-venus.png) no-repeat;
+}
+
+// The larger maps use their own (bigger) board image. This overrides the standard mars.png set by
+// .board-with-venus / .board-without-venus above; the container is sized to the image (720x680).
+.board-cont--large {
+  width: 720px;
+  height: 680px;
+  background-image: url(./assets/board/mars-large.png);
 }
 
 // // Not used yet.
@@ -424,7 +445,7 @@
     width: 88px;
   }
 
-  &.board-space-69, &.board-space-70, &.board-space-71, &.board-space-72, &.board-space-73, &.board-space-75, &.board-space-76, &.board-space-77, &.board-space-78 {
+  &.board-space-903, &.board-space-904, &.board-space-905, &.board-space-906, &.board-space-907, &.board-space-908, &.board-space-909, &.board-space-910, &.board-space-911 {
     .board-space-text {
       margin-top: -15px;
     }
