@@ -411,15 +411,16 @@
       margin: 632px 0 0 326px;
     }
 
-    // Ares hazard markers. The ocean-related ones (erosion / remove-dust-storm) sit near the
-    // bottom of the dial, so they are scaled about the dial centre like the ocean count. The
-    // "severe" markers sit beside the temperature / oxygen tracks, so they follow the repacked
+    // Ares hazard markers. The ocean-related ones (erosion / remove-dust-storm) are anchored to
+    // the ocean count, so they take the same translation the ocean count took (+108 top, +40 left
+    // from the standard layout) — keeping the erosion icon/value on the same row as the oceans.
+    // The "severe" markers sit beside the temperature / oxygen tracks, so they follow the repacked
     // large tracks (their offset from the matching track value, scaled). First-cut positions —
     // tune against the final art.
-    .global-ares-erosions-icon { margin: 620px 0 0 238px; }
-    .global-ares-erosions-val { margin: 627px 0 0 267px; }
-    .global-ares-remove-dust-storms-icon { margin: 511px 0 0 321px; }
-    .global-ares-remove-dust-storms-val { margin: 627px 0 0 444px; }
+    .global-ares-erosions-icon { margin: 637px 0 0 256px; } // nudged right to clear the 0% oxygen marker
+    .global-ares-erosions-val { margin: 643px 0 0 270px; }
+    .global-ares-remove-dust-storms-icon { margin: 544px 0 0 316px; }
+    .global-ares-remove-dust-storms-val { margin: 643px 0 0 421px; }
     .global-ares-severe-erosions-0 { margin: 275px 0 0 706px; }
     .global-ares-severe-erosions--2 { margin: 311px 0 0 681px; }
     .global-ares-severe-erosions--4 { margin: 344px 0 0 681px; }
