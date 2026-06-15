@@ -414,35 +414,40 @@
     // Ares hazard markers. The ocean-related ones (erosion / remove-dust-storm) are anchored to
     // the ocean count, so they take the same translation the ocean count took (+108 top, +40 left
     // from the standard layout) — keeping the erosion icon/value on the same row as the oceans.
-    // The "severe" markers sit just outside the temperature / oxygen tracks, so each is placed at
-    // its (repacked) large track value pushed radially outward from the dial centre (349,351).
-    // First-cut positions — tune against the final art.
-    .global-ares-erosions-icon { margin: 637px 0 0 256px; } // nudged right to clear the 0% oxygen marker
-    .global-ares-erosions-val { margin: 643px 0 0 270px; }
+    .global-ares-erosions-icon { margin: 637px 0 0 261px; } // nudged right to clear the 0% oxygen marker
+    .global-ares-erosions-val { margin: 643px 0 0 285px; }
     .global-ares-remove-dust-storms-icon { margin: 544px 0 0 316px; }
     .global-ares-remove-dust-storms-val { margin: 643px 0 0 421px; }
-    .global-ares-severe-erosions-0 { margin: 308px 0 0 720px; }
-    .global-ares-severe-erosions--2 { margin: 342px 0 0 695px; }
-    .global-ares-severe-erosions--4 { margin: 373px 0 0 690px; }
-    .global-ares-severe-erosions--6 { margin: 402px 0 0 686px; }
-    .global-ares-severe-erosions--8 { margin: 432px 0 0 674px; }
-    .global-ares-severe-dust-storms-3 { margin: 620px 0 0 112px; }
-    .global-ares-severe-dust-storms-4 { margin: 597px 0 0 82px; }
-    .global-ares-severe-dust-storms-5 { margin: 571px 0 0 53px; }
-    .global-ares-severe-dust-storms-6 { margin: 540px 0 0 31px; }
-    .global-ares-severe-dust-storms-7 { margin: 507px 0 0 9px; }
+
+    // Each "severe" marker sits just outboard of its matching track value marker (severe-erosion V
+    // outboard of temperature V; severe-dust-storm V outboard of oxygen V) and SHARES that value's
+    // rotation. Because the large tracks are repacked (see above), the standard transform's rotation
+    // is wrong here and must be overridden — the rotation below matches the corresponding large
+    // @temperature-vals-large / @oxygen-vals-large entry. Each margin is that large value marker's
+    // centre pushed ~45px radially out from the dial centre (351 left, 349 top), minus the marker's
+    // half-size (27, 30). The scale(.4) is re-stated because we override the whole transform.
+    .global-ares-severe-erosions-0 { margin: 296px 0 0 682px; transform: rotate(-4deg) scale(.4, .4); }
+    .global-ares-severe-erosions--2 { margin: 327px 0 0 683px; transform: rotate(1deg) scale(.4, .4); }
+    .global-ares-severe-erosions--4 { margin: 358px 0 0 681px; transform: rotate(6deg) scale(.4, .4); }
+    .global-ares-severe-erosions--6 { margin: 388px 0 0 676px; transform: rotate(11deg) scale(.4, .4); }
+    .global-ares-severe-erosions--8 { margin: 418px 0 0 669px; transform: rotate(16deg) scale(.4, .4); }
+    .global-ares-severe-dust-storms-3 { margin: 601px 0 0 103px; transform: rotate(-52deg) scale(.4, .4); }
+    .global-ares-severe-dust-storms-4 { margin: 577px 0 0 75px; transform: rotate(-46deg) scale(.4, .4); }
+    .global-ares-severe-dust-storms-5 { margin: 550px 0 0 48px; transform: rotate(-40deg) scale(.4, .4); }
+    .global-ares-severe-dust-storms-6 { margin: 520px 0 0 27px; transform: rotate(-34deg) scale(.4, .4); }
+    .global-ares-severe-dust-storms-7 { margin: 487px 0 0 7px; transform: rotate(-28deg) scale(.4, .4); }
 
     // Alt-Venus board wild-resource bonuses (venus 18..30) sit beside the tail end of the venus
     // track, so they follow the reprojected large venus track (offset from the matching value).
     .global-alt-venus {
-      .p18 { margin: 62px 0 0 384px; }
-      .p20 { margin: 68px 0 0 413px; }
-      .p22 { margin: 76px 0 0 439px; }
-      .p24 { margin: 86px 0 0 465px; }
-      .p26 { margin: 100px 0 0 489px; }
-      .p28 { margin: 116px 0 0 512px; }
-      .p30 { margin: 131px 0 0 527px; }
-      .p30b { margin: 143px 0 0 541px; }
+      .p18 { margin: 60px 0 0 385px; }
+      .p20 { margin: 66px 0 0 414px; }
+      .p22 { margin: 74px 0 0 440px; }
+      .p24 { margin: 84px 0 0 466px; }
+      .p26 { margin: 98px 0 0 490px; }
+      .p28 { margin: 114px 0 0 513px; }
+      .p30 { margin: 129px 0 0 528px; }
+      .p30b { margin: 141px 0 0 542px; }
     }
   }
 }
