@@ -14,34 +14,36 @@ export class AmazonisPlanitiaBoard extends MarsBoard {
 
     const PLANT = SpaceBonus.PLANT;
     const STEEL = SpaceBonus.STEEL;
-    const DRAW_CARD = SpaceBonus.DRAW_CARD;
     const TITANIUM = SpaceBonus.TITANIUM;
-    const HEAT = SpaceBonus.HEAT;
+    const DRAW_CARD = SpaceBonus.DRAW_CARD;
+    const ENERGY = SpaceBonus.ENERGY;
+    const WILD = SpaceBonus.WILD;
+    // "lobbyist" in the layout maps to the delegate (lobby a party) placement bonus.
+    const DELEGATE = SpaceBonus.DELEGATE;
 
-    // y=0
-    builder.land(STEEL, STEEL).ocean(STEEL).land().ocean(DRAW_CARD).land().land();
-    // y=1
-    builder.land().volcanic(STEEL).land().land().land().land().ocean(DRAW_CARD, DRAW_CARD);
-    // y=2
-    builder.land(STEEL).land().land().land().land().land().land().land(STEEL);
-    // y=3
-    builder.land(PLANT).land(PLANT).land(PLANT).land(PLANT).land(PLANT).land(PLANT).land(PLANT).land(PLANT).ocean(PLANT, PLANT);
-    // y=4
-    builder.land(PLANT, PLANT).land(PLANT).land(PLANT).land(PLANT).ocean(PLANT, PLANT).ocean(PLANT, PLANT)
-      .land(PLANT).land(PLANT).land(PLANT).land(PLANT, PLANT);
-    // y=5
-    builder.land(PLANT).land(PLANT, PLANT).land(PLANT).land(PLANT).ocean(PLANT).ocean(PLANT).ocean(PLANT)
-      .land(PLANT).land(PLANT).land(PLANT, PLANT).land(PLANT);
-    // y=6
-    builder.land().land().land().land().land().land(PLANT).land().land().land().land();
-    // y=7
-    builder.land(STEEL, STEEL).land().land(DRAW_CARD).land(DRAW_CARD).land().land(TITANIUM).land().land().ocean(PLANT);
-    // y=8
-    builder.land(STEEL).land(STEEL, STEEL).land().land().ocean(TITANIUM, TITANIUM).land().land().land();
-    // y=9
-    builder.land(TITANIUM).land().volcanic(DRAW_CARD).land().land().land().ocean(PLANT, PLANT);
-    // y=10
-    builder.land(STEEL).land(HEAT, HEAT).land().land(HEAT, HEAT).land().ocean(TITANIUM);
+    // Row A
+    builder.land(STEEL).land(STEEL, STEEL).land(STEEL).land(DRAW_CARD).land(TITANIUM, TITANIUM).land();
+    // Row B
+    builder.ocean().land(DELEGATE).land(STEEL).land().land(PLANT).ocean(PLANT, PLANT).ocean(TITANIUM, TITANIUM);
+    // Row C
+    builder.ocean(STEEL, STEEL).land().land(DRAW_CARD, DRAW_CARD).land().land(PLANT).ocean().land().land();
+    // Row D
+    builder.land(TITANIUM).ocean().land().land().land(PLANT).land(PLANT).land(PLANT, PLANT).land(PLANT).land(PLANT, DRAW_CARD);
+    // Row E (E1 = Hecates Tholus, volcanic)
+    builder.volcanic(STEEL, STEEL).land(PLANT).land(WILD).land(PLANT).ocean(DRAW_CARD).land(PLANT).land(PLANT, PLANT).land(PLANT).land(WILD).ocean(PLANT, PLANT);
+    // Row F
+    builder.land(PLANT).land(PLANT).land(PLANT, PLANT).land(PLANT, PLANT).ocean(PLANT, PLANT).ocean(PLANT, PLANT)
+      .land(STEEL, PLANT, PLANT).land(PLANT).land().land(PLANT).ocean(DRAW_CARD);
+    // Row G
+    builder.land(PLANT).land(PLANT, PLANT).ocean(PLANT, PLANT).land(ENERGY, ENERGY).land(ENERGY).land(ENERGY, ENERGY).land().land(PLANT).land(PLANT).land();
+    // Row H (H7 = Olympus Mons, H9 = Ascraeus Mons; both volcanic)
+    builder.land(PLANT).ocean(DRAW_CARD, DRAW_CARD).land(PLANT).land(ENERGY).land(ENERGY, ENERGY).land(PLANT).volcanic(DELEGATE, DELEGATE).land(STEEL).volcanic(DELEGATE);
+    // Row J (J8 = Pavonis Mons, volcanic)
+    builder.ocean(STEEL, TITANIUM).land().land(TITANIUM).land().land().land(PLANT, PLANT).land().volcanic(TITANIUM);
+    // Row K (K7 = Arsia Mons, volcanic)
+    builder.ocean().land().land(WILD).land().land(PLANT, PLANT, PLANT).land(PLANT, PLANT).volcanic(STEEL, STEEL);
+    // Row L
+    builder.land().land(STEEL, TITANIUM).land(STEEL, STEEL).land().land(PLANT).land(DRAW_CARD);
 
     const spaces = builder.build();
     return new AmazonisPlanitiaBoard(spaces);
