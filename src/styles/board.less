@@ -40,7 +40,10 @@
 // The larger maps use their own (bigger) board image. This overrides the standard mars.png set by
 // .board-with-venus / .board-without-venus above; the container is sized to the image (720x680).
 .board-cont--large {
-  width: 720px;
+  // 720px matches the background image; the extra ~20px gives the dynamic content of the optional
+  // modules (e.g. the Ares hazard markers and the off-Mars colony spaces, which sit near the right
+  // edge) room so it is not clipped.
+  width: 740px;
   height: 680px;
   background-image: url(./assets/board/mars-large.png);
 }
