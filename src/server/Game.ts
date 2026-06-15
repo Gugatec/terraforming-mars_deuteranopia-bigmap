@@ -75,6 +75,7 @@ import {BuildColony} from './deferredActions/BuildColony';
 import {newInitialDraft, newPreludeDraft, newCEOsDraft, newStandardDraft} from './Draft';
 import {partition, sum, toID, toName} from '../common/utils/utils';
 import {OrOptions} from './inputs/OrOptions';
+import {SelectResource} from './inputs/SelectResource';
 import {SelectOption} from './inputs/SelectOption';
 import {SelectSpace} from './inputs/SelectSpace';
 import {maybeRenamedMilestone} from '../common/ma/MilestoneName';
@@ -1585,6 +1586,17 @@ export class Game implements IGame, Logger {
         constants.TERRA_CIMMERIA_COLONY_COST,
         {title: 'Select how to pay for building a colony'}))
         .andThen(() => this.defer(new BuildColony(player)));
+      break;
+    case SpaceBonus.WILD:
+      // The player chooses any one standard resource; each occurrence is an independent choice.
+      for (let i = 0; i < count; i++) {
+        this.defer(new SimpleDeferredAction(player, () =>
+          new SelectResource('Select a resource to gain from the placement bonus')
+            .andThen((resource) => {
+              player.stock.add(resource, 1, {log: true});
+              return undefined;
+            })));
+      }
       break;
     default:
       throw new Error('Unhandled space bonus ' + spaceBonus + '. Report this exact error, please.');
