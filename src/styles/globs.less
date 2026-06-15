@@ -414,23 +414,23 @@
     // Ares hazard markers. The ocean-related ones (erosion / remove-dust-storm) are anchored to
     // the ocean count, so they take the same translation the ocean count took (+108 top, +40 left
     // from the standard layout) — keeping the erosion icon/value on the same row as the oceans.
-    // The "severe" markers sit beside the temperature / oxygen tracks, so they follow the repacked
-    // large tracks (their offset from the matching track value, scaled). First-cut positions —
-    // tune against the final art.
+    // The "severe" markers sit just outside the temperature / oxygen tracks, so each is placed at
+    // its (repacked) large track value pushed radially outward from the dial centre (349,351).
+    // First-cut positions — tune against the final art.
     .global-ares-erosions-icon { margin: 637px 0 0 256px; } // nudged right to clear the 0% oxygen marker
     .global-ares-erosions-val { margin: 643px 0 0 270px; }
     .global-ares-remove-dust-storms-icon { margin: 544px 0 0 316px; }
     .global-ares-remove-dust-storms-val { margin: 643px 0 0 421px; }
-    .global-ares-severe-erosions-0 { margin: 275px 0 0 706px; }
-    .global-ares-severe-erosions--2 { margin: 311px 0 0 681px; }
-    .global-ares-severe-erosions--4 { margin: 344px 0 0 681px; }
-    .global-ares-severe-erosions--6 { margin: 371px 0 0 678px; }
-    .global-ares-severe-erosions--8 { margin: 405px 0 0 671px; }
-    .global-ares-severe-dust-storms-3 { margin: 584px 0 0 96px; }
-    .global-ares-severe-dust-storms-4 { margin: 557px 0 0 68px; }
-    .global-ares-severe-dust-storms-5 { margin: 532px 0 0 43px; }
-    .global-ares-severe-dust-storms-6 { margin: 501px 0 0 24px; }
-    .global-ares-severe-dust-storms-7 { margin: 470px 0 0 6px; }
+    .global-ares-severe-erosions-0 { margin: 308px 0 0 720px; }
+    .global-ares-severe-erosions--2 { margin: 342px 0 0 695px; }
+    .global-ares-severe-erosions--4 { margin: 373px 0 0 690px; }
+    .global-ares-severe-erosions--6 { margin: 402px 0 0 686px; }
+    .global-ares-severe-erosions--8 { margin: 432px 0 0 674px; }
+    .global-ares-severe-dust-storms-3 { margin: 620px 0 0 112px; }
+    .global-ares-severe-dust-storms-4 { margin: 597px 0 0 82px; }
+    .global-ares-severe-dust-storms-5 { margin: 571px 0 0 53px; }
+    .global-ares-severe-dust-storms-6 { margin: 540px 0 0 31px; }
+    .global-ares-severe-dust-storms-7 { margin: 507px 0 0 9px; }
 
     // Alt-Venus board wild-resource bonuses (venus 18..30) sit beside the tail end of the venus
     // track, so they follow the reprojected large venus track (offset from the matching value).
