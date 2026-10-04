@@ -129,3 +129,17 @@ export function marsTileLabel(x: number, y: number, middleRow: number): string {
   const column = x - Math.abs(y - middleRow) + 1;
   return ROW_LETTERS[y] + column;
 }
+
+/**
+ * The coordinate label of space |id| among a game's |spaces|, for use where only the id is at
+ * hand (e.g. log messages). Ids alone do not identify a coordinate, since the same id sits in a
+ * different place on a larger map, so on-Mars labels are computed from the space's position.
+ */
+export function spaceLabel(id: SpaceId, spaces: ReadonlyArray<{id: SpaceId, x: number, y: number}>): string {
+  const space = spaces.find((s) => s.id === id);
+  if (space === undefined || isMoonSpace(id) || space.x < 0) {
+    return getSpaceName(id);
+  }
+  const maxY = Math.max(...spaces.filter((s) => isMarsSpace(s.id)).map((s) => s.y));
+  return marsTileLabel(space.x, space.y, maxY / 2);
+}

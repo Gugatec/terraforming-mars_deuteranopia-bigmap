@@ -1,6 +1,6 @@
 import * as constants from '../common/constants';
 import {BeginnerCorporation} from './cards/corporation/BeginnerCorporation';
-import {Board} from './boards/Board';
+import {Board, migrateColonySpaceId} from './boards/Board';
 import {GlobalParameterMaximums, getGlobalParameterMaximums} from '../common/boards/GlobalParameterMaximums';
 import {GlobalParameterThreshold, GlobalParameterTracks, getGlobalParameterTracks} from '../common/boards/GlobalParameterTracks';
 import {CardName} from '../common/cards/CardName';
@@ -1844,7 +1844,8 @@ export class Game implements IGame, Logger {
     game.someoneHasRemovedOtherPlayersPlants = d.someoneHasRemovedOtherPlayersPlants;
     game.syndicatePirateRaider = d.syndicatePirateRaider;
     game.gagarinBase = d.gagarinBase;
-    game.stJosephCathedrals = d.stJosephCathedrals;
+    // Cathedrals can sit on off-Mars cities, whose ids were renumbered.
+    game.stJosephCathedrals = d.stJosephCathedrals.map((id) => migrateColonySpaceId(id, board));
     game.nomadSpace = d.nomadSpace;
     game.tradeEmbargo = d.tradeEmbargo ?? false;
     game.beholdTheEmperor = d.beholdTheEmperor ?? false;

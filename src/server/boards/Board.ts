@@ -39,6 +39,18 @@ const SPACE_ID_RENAMES = new Map<string, SpaceId>([
 ]);
 
 /**
+ * Translates an off-Mars space id stored outside the board itself (e.g. the list of St. Joseph
+ * cathedrals) in a saved game. An id that is still a space on |board| is current; otherwise it
+ * predates the renumbering.
+ */
+export function migrateColonySpaceId(id: SpaceId, board: Board): SpaceId {
+  if (board.spaces.some((space) => space.id === id)) {
+    return id;
+  }
+  return SPACE_ID_RENAMES.get(id) ?? id;
+}
+
+/**
  * A representation of any hex board. This is normally Mars (Tharsis, Hellas, Elysium) but can also be The Moon.
  *
  * It also includes additional spaces, known as Colonies, that are not adjacent to other spaces.
