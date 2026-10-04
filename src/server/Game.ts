@@ -1210,9 +1210,9 @@ export class Game implements IGame, Logger {
       player.increaseTerraformRating(steps);
     }
 
-    // Track bonuses (a card, a temperature step at 8%/12%, ...) vary per map. The temperature step
-    // applies even during the solar phase; a card bonus is skipped there (see helper).
-    this.grantGlobalParameterTrackBonuses(player, this.globalParameterTracks.oxygen, this.oxygenLevel, newOxygenLevel);
+    // Track bonuses (a card, a temperature step at 8%/12%, ...) vary per map.
+    this.grantGlobalParameterTrackBonuses(player, this.globalParameterTracks.oxygen, this.oxygenLevel, newOxygenLevel, 'player');
+    this.grantGlobalParameterTrackBonuses(player, this.globalParameterTracks.oxygen, this.oxygenLevel, newOxygenLevel, 'global');
 
     this.oxygenLevel = newOxygenLevel;
 
@@ -1300,9 +1300,9 @@ export class Game implements IGame, Logger {
     const steps = Math.min(increments, (this.globalParameterMaximums.temperature - this.temperature) / 2);
     const newTemperature = this.temperature + steps * 2;
 
-    // Track bonuses (heat/plant production, an ocean at 0C, ...) vary per map. The ocean bonus
-    // applies even during the solar phase; the production bonuses are skipped there (see helper).
-    this.grantGlobalParameterTrackBonuses(player, this.globalParameterTracks.temperature, this.temperature, newTemperature);
+    // Track bonuses (heat/plant production, an ocean at 0C, ...) vary per map. The player's own
+    // bonuses come before the card effects; the global ones (the ocean) come after the TR increase.
+    this.grantGlobalParameterTrackBonuses(player, this.globalParameterTracks.temperature, this.temperature, newTemperature, 'player');
 
     if (this.phase !== Phase.SOLAR) {
       for (const card of player.playedCards) {
@@ -1312,6 +1312,8 @@ export class Game implements IGame, Logger {
       TurmoilHandler.onGlobalParameterIncrease(player, GlobalParameter.TEMPERATURE, steps);
       player.increaseTerraformRating(steps);
     }
+
+    this.grantGlobalParameterTrackBonuses(player, this.globalParameterTracks.temperature, this.temperature, newTemperature, 'global');
 
     this.temperature = newTemperature;
 
@@ -1334,35 +1336,43 @@ export class Game implements IGame, Logger {
     return getGlobalParameterTracks(this.gameOptions.boardName);
   }
 
-  // Grants the track bonuses crossed when a global parameter rises from |from| to |to|.
-  // |production|/|card| are player benefits and are skipped in the solar (World Government) phase;
-  // |ocean|/|temperature| are global effects that apply regardless and may cascade further.
+  // Grants the track bonuses of one |kind| crossed when a global parameter rises from |from| to |to|.
+  // The 'player' bonuses (|production|/|card|) are the player's own benefit and are skipped in the
+  // solar (World Government) phase; the 'global' ones (|ocean|/|temperature|) apply regardless and
+  // may cascade further.
   private grantGlobalParameterTrackBonuses(
     player: IPlayer,
     thresholds: ReadonlyArray<GlobalParameterThreshold>,
     from: number,
-    to: number): void {
-    const grantPlayerBonuses = this.phase !== Phase.SOLAR;
+    to: number,
+    kind: 'player' | 'global'): void {
+    if (kind === 'player' && this.phase === Phase.SOLAR) {
+      return;
+    }
     for (const {value, bonus} of thresholds) {
       if (from >= value || to < value) {
         continue;
       }
       switch (bonus.type) {
       case 'production':
-        if (grantPlayerBonuses) {
+        if (kind === 'player') {
           player.production.add(bonus.resource, bonus.amount, {log: true});
         }
         break;
       case 'card':
-        if (grantPlayerBonuses) {
+        if (kind === 'player') {
           player.drawCard(bonus.amount);
         }
         break;
       case 'ocean':
-        this.defer(new PlaceOceanTile(player, {title: 'Select space for ocean from temperature increase'}));
+        if (kind === 'global') {
+          this.defer(new PlaceOceanTile(player, {title: 'Select space for ocean from temperature increase'}));
+        }
         break;
       case 'temperature':
-        this.increaseTemperature(player, 1);
+        if (kind === 'global') {
+          this.increaseTemperature(player, 1);
+        }
         break;
       }
     }

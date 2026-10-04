@@ -4,7 +4,7 @@ import {Phase} from '../../src/common/Phase';
 import {Resource} from '../../src/common/Resource';
 import {getGlobalParameterTracks} from '../../src/common/boards/GlobalParameterTracks';
 import {testGame} from '../TestGame';
-import {setOxygenLevel, setTemperature} from '../TestingUtils';
+import {fakeCard, setOxygenLevel, setTemperature} from '../TestingUtils';
 
 describe('GlobalParameterTracks', () => {
   it('standard maps keep the classic track bonuses', () => {
@@ -31,6 +31,25 @@ describe('GlobalParameterTracks', () => {
       {value: 7, bonus: {type: 'card', amount: 1}},
       {value: 12, bonus: {type: 'temperature'}},
     ]);
+  });
+
+  it('queues the 0C ocean after card effects and the TR increase', () => {
+    const [game, player] = testGame(1);
+    game.phase = Phase.ACTION;
+    setTemperature(game, -2);
+    const tr = player.terraformRating;
+    let queuedWhenCardFires = -1;
+    player.playedCards.push(fakeCard({
+      onGlobalParameterIncrease: () => {
+        queuedWhenCardFires = game.deferredActions.length;
+      },
+    }));
+
+    game.increaseTemperature(player, 1);
+
+    expect(queuedWhenCardFires).eq(0);
+    expect(player.terraformRating).eq(tr + 1);
+    expect(game.deferredActions.length).eq(1);
   });
 
   it('Amazonis Planitia grants plant production at -12C', () => {
