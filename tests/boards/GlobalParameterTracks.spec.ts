@@ -29,7 +29,7 @@ describe('GlobalParameterTracks', () => {
     ]);
     expect(tracks.oxygen).deep.eq([
       {value: 7, bonus: {type: 'card', amount: 1}},
-      {value: 12, bonus: {type: 'temperature'}},
+      {value: 11, bonus: {type: 'temperature'}},
     ]);
   });
 
@@ -84,7 +84,7 @@ describe('GlobalParameterTracks', () => {
     expect(player.cardsInHand.length).eq(before + 1);
   });
 
-  it('Amazonis Planitia raises temperature at 12% oxygen, not 8%', () => {
+  it('Amazonis Planitia raises temperature at 11% oxygen, not 8%', () => {
     const [game, player] = testGame(1, {boardName: BoardName.AMAZONIS_PLANITIA});
     game.phase = Phase.ACTION;
     setTemperature(game, -10);
@@ -95,8 +95,13 @@ describe('GlobalParameterTracks', () => {
     expect(game.getOxygenLevel()).eq(8);
     expect(game.getTemperature()).eq(-10);
 
-    // Crossing 12% raises temperature one step.
-    setOxygenLevel(game, 11);
+    // Crossing 11% raises temperature one step.
+    setOxygenLevel(game, 10);
+    game.increaseOxygenLevel(player, 1);
+    expect(game.getOxygenLevel()).eq(11);
+    expect(game.getTemperature()).eq(-8);
+
+    // Going on to 12% does not raise it again.
     game.increaseOxygenLevel(player, 1);
     expect(game.getOxygenLevel()).eq(12);
     expect(game.getTemperature()).eq(-8);
@@ -123,9 +128,9 @@ describe('GlobalParameterTracks', () => {
     game.increaseOxygenLevel(player, 1);
     expect(player.cardsInHand.length).eq(cardsBefore);
 
-    // The 12% oxygen -> temperature cascade is a global effect and applies regardless.
+    // The 11% oxygen -> temperature cascade is a global effect and applies regardless.
     setTemperature(game, -10);
-    setOxygenLevel(game, 11);
+    setOxygenLevel(game, 10);
     game.increaseOxygenLevel(player, 1);
     expect(game.getTemperature()).eq(-8);
   });

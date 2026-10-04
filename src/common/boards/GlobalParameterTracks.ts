@@ -55,7 +55,7 @@ const AMAZONIS_PLANITIA: GlobalParameterTracks = {
   ],
   oxygen: [
     {value: 7, bonus: {type: 'card', amount: 1}},
-    {value: 12, bonus: {type: 'temperature'}},
+    {value: 11, bonus: {type: 'temperature'}},
   ],
 };
 

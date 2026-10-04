@@ -1210,7 +1210,7 @@ export class Game implements IGame, Logger {
       player.increaseTerraformRating(steps);
     }
 
-    // Track bonuses (a card, a temperature step at 8%/12%, ...) vary per map.
+    // Track bonuses (a card, a temperature step at 8%/11%, ...) vary per map.
     this.grantGlobalParameterTrackBonuses(player, this.globalParameterTracks.oxygen, this.oxygenLevel, newOxygenLevel, 'player');
     this.grantGlobalParameterTrackBonuses(player, this.globalParameterTracks.oxygen, this.oxygenLevel, newOxygenLevel, 'global');
 
