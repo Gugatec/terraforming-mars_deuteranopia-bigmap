@@ -221,11 +221,21 @@ export class MarsBoard extends Board {
     return true;
   }
 
+  /** The row (y) of the map's equator: its middle, widest row. */
+  public get equatorRow(): number {
+    return this.maxY / 2;
+  }
+
+  /** The row (y) at the bottom of the map. */
+  public get bottomRow(): number {
+    return this.maxY;
+  }
+
   private computeEdges(): ReadonlyArray<Space> {
     // The middle (widest) row is at y === maxY / 2. The hexagon's right column is straight at
     // x === maxX, the top and bottom rows are y === 0 and y === maxY, and the two left diagonals
     // are described by x + y and y - x both equalling the middle row index.
-    const middleRow = this.maxY / 2;
+    const middleRow = this.equatorRow;
     return this.spaces.filter((space) => {
       if (space.spaceType === SpaceType.COLONY) {
         return false;
