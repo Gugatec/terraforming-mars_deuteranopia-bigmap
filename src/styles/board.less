@@ -49,13 +49,11 @@
   background-image: url(./assets/board/mars-large.png);
 }
 
-// Without the Venus track, the larger maps use a Venus-less board image (mirrors
-// .board-without-venus for the standard board). The combined selector is more specific than
-// .board-cont--large, so it wins when both classes are on the container.
-// TODO: switch this URL to ./assets/board/mars-large-without-venus.png once that art exists;
-// using mars-large.png as a placeholder for now.
+// Without the Venus expansion, the larger maps use a board image whose Venus track is faded out
+// (mirrors .board-without-venus for the standard board). The combined selector is more specific
+// than .board-cont--large, so it wins when both classes are on the container.
 .board-cont--large.board-without-venus {
-  background-image: url(./assets/board/mars-large.png);
+  background-image: url(./assets/board/mars-large-without-venus.png);
 }
 
 .board-legend {
